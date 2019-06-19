@@ -18,10 +18,11 @@
           <div class="col-lg-4">
               <div class="card" style="width: 20rem;">
                   <div class="card-body">
-                    <h4 class="card-title">{{ item.Title }}</h4>
+                    <h4 class="card-title card-link">{{ item.Title }}</h4>
                     <h6 class="card-subtitle mb-2 text-muted">Company: {{ item.Company }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Location: {{ item.Location }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Salary: {{ item.Salary_Info }}</h6>
+                    <a href="{{ item.Link }}" class="card-link">Link to Post</a>
                   </div>
                 </div>
             </div>
