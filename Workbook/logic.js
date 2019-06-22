@@ -41,6 +41,38 @@ for (var i = 0; i < data.length; i++) {
 
 jobPostingsLayer = L.layerGroup(jobPostingsArray);
 
+///////////////
+
+var zillowData;
+fetch("Resources/zillow.json")
+    .then(res => res.json())
+    .then(data => zillowData = JSON.parse(data));
+
+var lat = [];
+var long = [];
+var heatArray2 = [];
+
+for (var i = 0; i < data.length; i++) {
+  var  = data[i];
+  if (.Coordinates && .Location) {
+
+      lat.push(L.marker(.Coordinates)
+
+for (var i = 0; i < data.length; i++) {
+  var medVal = data[i];
+
+  if (medVal.Location) {
+    heatArray.push(medVal.Coordinates);
+  };
+
+  var heat = L.heatLayer(heatArray, {
+    radius: 50,
+    blur: 30,
+    minOpacity: 0.30
+  });
+
+
+zillowLayer = L.layerGroup(zillowArray);
 
 var baseMaps = {
   "Street Map": streetmap,
@@ -52,13 +84,18 @@ var overlayMaps = {
   "HeatMap": heat
 };
 
+var overlayMap2 = {
+  "Median Value per Sq ft": zillowLayer,
+  "HeatMap": heat
+};
+
 
 var myMap = L.map("map", {
   center: [37.09, -95.71],
   zoom: 5,
-  layers: [streetmap, jobPostingsLayer]
+  layers: [streetmap, jobPostingsLayer, zillowLayer]
 });
 
-L.control.layers(baseMaps, overlayMaps, {
+L.control.layers(baseMaps, overlayMaps, overlayMap2) 
   collapsed: false
-}).addTo(myMap);
+.addTo(myMap);
