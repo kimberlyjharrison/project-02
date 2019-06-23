@@ -1,6 +1,6 @@
 console.log('app.js working')
 
-//   reference:
+// reference:
 //https://www.codebyamir.com/blog/populate-a-select-dropdown-list-with-json
 let dropdown = $('#selDataset');
 
@@ -21,11 +21,13 @@ let dropdown = $('#selDataset');
 function optionChanged(newSample) {
     // Fetch new data each time a new sample is selected
     console.log(newSample)
+
     var apiurl = 'http://127.0.0.1:5000/filter/'+newSample
     var data = d3.json(apiurl, function(data) {
-    createMap(data)
+    createPoints(data)
 })
 }
+
 
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -41,7 +43,23 @@ var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
   accessToken: API_KEY
 });
 
-function createMap(data) {
+var baseMaps = {
+    "Street Map": streetmap,
+    "Dark Map": darkmap
+  };
+
+var myMap = L.map("map", {
+    center: [37.09, -95.71],
+    zoom: 5,
+    layers: [streetmap]
+  });
+
+function createPoints(data) {
+
+  map.remove()
+  $('#mapholder').after('<div id="map"></div>')
+  
+
   var jobPostingsArray = [];
   for (var i = 0; i < data.length; i++) {
       var jobPosting = data[i];
@@ -93,12 +111,6 @@ function createMap(data) {
 
   jobPostingsLayer = L.layerGroup(jobPostingsArray);
 
-
-  var baseMaps = {
-    "Street Map": streetmap,
-    "Dark Map": darkmap
-  };
-
   var overlayMaps = {
     "Job Postings": jobPostingsLayer,
     "HeatMap of Job Posts": heat,
@@ -106,11 +118,30 @@ function createMap(data) {
   };
 
 
+  var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.streets",
+  accessToken: API_KEY
+});
+
+var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.dark",
+  accessToken: API_KEY
+});
+
+var baseMaps = {
+    "Street Map": streetmap,
+    "Dark Map": darkmap
+  };
   var myMap = L.map("map", {
     center: [37.09, -95.71],
     zoom: 5,
-    layers: [streetmap, jobPostingsLayer]
+    layers: [streetmap, heat]
   });
+
 
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
