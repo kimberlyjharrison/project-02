@@ -66,20 +66,20 @@ jobPostingsLayer = L.layerGroup(jobPostingsArray);
 
 
 var baseMaps = {
-  "Street Map": streetmap,
-  "Dark Map": darkmap
+  "Street Map(light)": streetmap,
+  "Street Map(dark)": darkmap
 };
 
 var overlayMaps = {
   "Job Postings": jobPostingsLayer,
   "HeatMap": heat,
-  "Zillow HeatMap": zillowHeat
+  "Median Cost per st ft (Jan 2019)": zillowHeat
 };
 
 
 var myMap = L.map("map", {
-  center: [37.09, -95.71],
-  zoom: 5,
+  center: [39.8283, -98.5795],
+  zoom: 4,
   layers: [streetmap, jobPostingsLayer]
 });
 
