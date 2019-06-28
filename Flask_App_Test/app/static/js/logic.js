@@ -1,5 +1,7 @@
 console.log("leaflet map goes here")
 
+//  create map layers
+
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
@@ -13,7 +15,7 @@ var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
   id: "mapbox.dark",
   accessToken: API_KEY
 });
-
+// create markers
 var jobPostingsArray = [];
 for (var i = 0; i < data.length; i++) {
     var jobPosting = data[i];
@@ -24,7 +26,6 @@ for (var i = 0; i < data.length; i++) {
             "</h3> <hr> <h3>" + jobPosting.Salary_Info + "</h3> <a href=\"" + jobPosting.Link + "\" target=\"_blank\">Find Job Posting Here</a>"));
     }
 };
-
 var heatArray = [];
 for (var i = 0; i < data.length; i++) {
     var jobPosting = data[i];
@@ -32,7 +33,6 @@ for (var i = 0; i < data.length; i++) {
     if (jobPosting.Location) {
       heatArray.push(jobPosting.Coordinates);
     };
-
     var heat = L.heatLayer(heatArray, {
       radius: 80,
       blur: 28,
@@ -42,9 +42,8 @@ for (var i = 0; i < data.length; i++) {
 
 var zillowArray = [];
 for (var i = 0; i < zillow.length; i++) {
-
     if (zillow[i].lat && zillow[i].lng) {
-        zillowArray.push([zillow[i].lat, zillow[i].lng])
+        zillowArray.push([zillow[i].lat, zillow[i].lng, zillow[i].medValuePSFt])
     }
 
     var zillowHeat = L.heatLayer(zillowArray, {
@@ -61,9 +60,7 @@ for (var i = 0; i < zillow.length; i++) {
     });
 };
 
-
 jobPostingsLayer = L.layerGroup(jobPostingsArray);
-
 
 var baseMaps = {
   "Street Map(light)": streetmap,
@@ -73,9 +70,8 @@ var baseMaps = {
 var overlayMaps = {
   "Job Postings": jobPostingsLayer,
   "HeatMap": heat,
-  "Median Cost per st ft (Jan 2019)": zillowHeat
+  "Median Cost per sq ft (Jan 2019)": zillowHeat
 };
-
 
 var myMap = L.map("map", {
   center: [39.8283, -98.5795],
